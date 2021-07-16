@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="button" id="button1" value="button1"><br>
+    <input type="button" id="button2" value="button2"><br>
+    <input type="button" id="button3" value="button3"><br>
+
+    <h3 id="output"></h3>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        var req_token = localStorage.getItem("jwt_auth");
+
+        if (req_token === null)
+        {
+            req_token = "NODATA"
+        }
+        
+        let payload = {
+            usr:"Sunnyshineshow",
+            pwd:"Sun3939",
+            auth: req_token
+        }
+        
+        console.log("Posting")
+
+        $.post("https://sundragon.advws.com/test/sun/jwt/auth/",payload, (msg) =>
+        {
+            if (msg.status != "valid")
+            {
+                req_token = msg;
+                localStorage.setItem("jwt_auth",req_token);
+                console.log("Posted");
+            }
+            else
+            {
+                console.log("Token Already in use")
+            }
+        })
+
+    </script>
+    <script>
+        $(document).ready(() =>
+        {
+            $("#button1").click(() => 
+            {
+                payload = {
+                    auth: req_token,
+                    button_key: 1,
+                    message: "Hello"
+                }
+
+                $.post("https://sundragon.advws.com/test/sun/jwt/request/",payload, (msg) =>
+                {
+                    document.getElementById('output').innerHTML = msg;
+                })
+            })
+
+            $("#button2").click(() => 
+            {
+                payload = {
+                    auth: req_token,
+                    button_key: 2,
+                    message: "Hello"
+                }
+
+                $.post("https://sundragon.advws.com/test/sun/jwt/request/",payload, (msg) =>
+                {
+                    document.getElementById('output').innerHTML = msg;
+                })
+            })
+
+            $("#button3").click(() => 
+            {
+                payload = {
+                    auth: req_token,
+                    button_key: 3,
+                    message: "Hello"
+                }
+
+                $.post("https://sundragon.advws.com/test/sun/jwt/request/",payload, (msg) =>
+                {
+                    document.getElementById('output').innerHTML = msg;
+                })
+            })
+        })
+    </script>
+</body>
+</html>

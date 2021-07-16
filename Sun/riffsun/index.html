@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liff Starter</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+</head>
+<body>
+    <div id="More Info">
+        <h1>Advance Web Service</h1>
+        <h1 id="output_js"></h1>
+        <h2 id="error_js"><h2>
+        <h3 id="error2_js"></h3>
+        <p id="data">Your Location:</p>
+    </div>
+    <div id="map" style="height: 400px;">Map should be display here</div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        var i = 0;
+
+        //LIFF Initialize
+
+        let userProfile;
+
+        liff.init({ liffId: "1656139076-zaopXm2N" }, () =>
+        {
+            if(liff.isLoggedIn())
+            {
+                //Get User Data
+
+                liff.getProfile().then(profile => {
+
+                    userProfile = profile;
+                })
+                .catch((err) => {
+                    document.getElementById('error_js').innerHTML = 'error '+ err;
+                });
+
+            }
+            else{
+
+                liff.login();
+            }
+            
+        }).then(() => {
+            // console.log("Test Text")
+            // console.log("OS:",liff.getOS());
+            // console.log("Language:",liff.getLanguage());
+            // console.log("SDK Version:",liff.getVersion());
+            // console.log("LINE Version:",liff.getLineVersion());
+            // console.log("In Client:",liff.isInClient());
+            // console.log("Logged In:",liff.isLoggedIn());
+            // console.log("API 'ShareTargetPicker':",liff.isApiAvailable('shareTargetPicker'));
+
+            // const accessToken = liff.getAccessToken();
+
+            // if (accessToken) {
+            // fetch("https://api.line.me/oauth2/v2.1/verify", {
+            //     headers: {
+            //     "Content-Type": "application/json",
+            //     Authorization: `Bearer ${accessToken}`
+            //     }
+            // });
+            // }
+            // console.log("AccessToken:",accessToken);
+            // console.log("ID Token:",liff.getIDToken());
+            // console.log("Decoded ID Token:",liff.getDecodedIDToken());
+            // console.log("Email:",liff.getDecodedIDToken().email); //Problem
+            // console.log("Context:",liff.getContext());
+
+
+            console.log("Initialized");
+
+
+        })
+        .catch((err) => {
+          console.error(err.code, error.message);
+        });
+
+    </script>
+        <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBQwdeP0gegsHLNFUFvHpVFePFwl9Jcy7U&callback=initMap&libraries=&v=weekly,https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+        async
+        ></script>
+        <script>
+            function initMap()
+            {
+                sleep(3000)
+                let map;
+            
+                if (navigator.geolocation) {
+                    console.log("Map Initialized");
+                }
+
+                else { 
+                    document.getElementById('map').innerHTML = "An error occured while getting Geolocation.";                
+                }
+
+                navigator.geolocation.getCurrentPosition((position) =>
+                {
+                    const myLatLng = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    console.log(position.coords.latitude);
+                    console.log(position.coords.longitude);
+                    console.log(userProfile);
+
+                    map = new google.maps.Map(document.getElementById("map"), {
+                    center: myLatLng,
+                    zoom: 16,
+                    })
+
+                    const marker = new google.maps.Marker(
+                    {
+                        position: myLatLng,
+                        map: map
+                    })
+
+                    let payload = {
+                        userId: userProfile.userId,
+                        displayName: userProfile.displayName,
+                        lat: myLatLng.lat,
+                        lng: myLatLng.lng
+                    }
+                    
+                    $.post("https://sundragon.advws.com/test/sun/lineliff/", payload,(msg) => 
+                    {
+                        document.getElementById('output_js').innerHTML = msg.message;
+                    });
+                    console.log("Data Send")
+
+                });
+            }
+
+            function sleep(milliseconds) {
+                const date = Date.now();
+                let currentDate = null;
+                do {
+                    currentDate = Date.now();
+                } while (currentDate - date < milliseconds);
+                }
+        </script>
+
+</body>
+</html>

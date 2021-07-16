@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liff Starter</title>
+</head>
+<body>
+    <h1>Advance Web Service</h1>
+    <h1 id="output_js"></h1>
+    <h2 id="error_js"><h2>
+    <h3 id="error2_js"></h3>
+    <p id="data"></p>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+    <script>
+        //LIFF Initialize
+
+        let userProfile;
+
+        liff.init({ liffId: "1656139076-zaopXm2N" }, () =>
+        {
+            if(liff.isLoggedIn())
+            {
+                //Get User Data
+
+                liff.getProfile().then(profile => {
+
+                    const idToken = liff.getDecodedIDToken();
+                    console.log(idToken);
+
+                    $.post("https://sundragon.advws.com/test/sun/lineliff/",profile,(msg) => 
+                    {
+                        document.getElementById('output_js').innerHTML = msg.message;
+                    });
+                })
+                .catch((err) => {
+                    document.getElementById('error_js').innerHTML = 'error '+ err;
+                });
+
+            }
+            else{
+
+                liff.login();
+            }
+            
+        }).then(() => {
+            console.log("Test Text")
+            console.log("OS:",liff.getOS());
+            console.log("Language:",liff.getLanguage());
+            console.log("SDK Version:",liff.getVersion());
+            console.log("LINE Version:",liff.getLineVersion());
+            console.log("In Client:",liff.isInClient());
+            console.log("Logged In:",liff.isLoggedIn());
+            console.log("API 'ShareTargetPicker':",liff.isApiAvailable('shareTargetPicker'));
+
+            const accessToken = liff.getAccessToken();
+
+            if (accessToken) {
+            fetch("https://api.line.me/oauth2/v2.1/verify", {
+                headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`
+                }
+            });
+            }
+            console.log("AccessToken:",accessToken);
+            console.log("ID Token:",liff.getIDToken());
+            console.log("Decoded ID Token:",liff.getDecodedIDToken());
+            console.log("Email:",liff.getDecodedIDToken().email); //Problem
+            console.log("Context:",liff.getContext());
+
+
+            console.log("Initialized");
+
+
+        })
+        .catch((err) => {
+          console.error(err.code, error.message);
+        });
+
+    </script>
+</body>
+</html>
