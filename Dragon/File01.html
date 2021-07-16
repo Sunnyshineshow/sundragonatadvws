@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+/* Style the header */
+header {
+  background-color: rgb(54, 109, 68);
+  padding: 30px;
+  text-align: center;
+  font-size: 35px;
+  color: white;
+}
+</style>
+
+<header>
+    <h1>Register your information data </h1>  
+</header>
+<br>
+<body style="background-color:lightgreen">    
+
+    <div style="border: 2px solid rgb(54, 109, 68)">
+        <h4>Enter your Info</h4>
+        <ul>
+        <li>First Name: <input type="text" id="FirstName" name="FirstName"> </li> <br>
+        <li>Last Name: <input type="text" id="LastName" name="LastName"></li> <br>
+        <li>
+            Gender: <input type="radio" id="Male" name="Gender" value="Male"> <label> Male </label>
+                    <input type="radio" id="Female" name="Gender" value="Female"> <label> Female </label>
+                    <input type="radio" id="Other" name="Gender" value="Other"> <label> Other </label>
+        </li>
+    </ul>
+    <br>
+
+    <button id="Submit" type="button" onclick="CheckingData()">Submit</button>
+
+    <p id="Said"> </p>
+    <br>
+    </div>
+    
+    <h2>========================================================================================</h2>
+
+    <h1>Serach information</h1>
+    <h4>Please enter your keyword</h4>
+    <input type="text" id="Searching" name="keyword">
+    <p>Searching on: 
+        <input type="radio" id="S_Name" name="Serachbutton" value="String"> <label> Name </label>
+        <input type="radio" id="S_LName" name="Serachbutton" value="String"> <label> Last Name </label>
+        <input type="radio" id="S_Gender" name="Serachbutton" value="String"> <label> Gender </label>
+        <input type="radio" id="S_Time" name="Serachbutton" value="String"> <label> Time </label>
+    </p>      
+    <button id="SubmitSearch" type="button" onclick="FindData()">Find It!</button>    
+    </p>    
+    <p id="Search Status"></p>    
+    <h1 id="Search Bar"></h1>
+    <ul>
+        <p id="SearchResult"></p>
+    </ul>    
+    
+    
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+    
+    function tellthesubmit_time() 
+    { 
+        document.getElementById("Said").innerHTML = "Data was submit on " + Date();        
+    }
+
+    
+    function CheckingData()
+    {
+        if(!($(FirstName).val()))
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at First Name");
+        }  
+        else if(!($(LastName).val()))
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at Last Name");
+        }    
+        else if(document.getElementById("Male").checked === false && document.getElementById("Female").checked === false && document.getElementById("Other").checked === false )
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at Gender");
+        }
+        else
+        {
+            document.getElementById("Said").innerHTML = "Data was submit on " + Date();
+        }   
+
+         //Check gender to string
+         var Gender;
+        if(document.getElementById("Male").checked === true)
+        {
+            Gender = "Male";     
+        }
+        else if(document.getElementById("Female").checked === true)
+        {
+            Gender = "Female";  
+        }
+        else if(document.getElementById("Other").checked === true)
+        {
+            Gender = "Other"; 
+        }
+
+
+        var ProfileData =
+        {
+            FirstName:$(FirstName).val(),
+            LastName:$(LastName).val(),
+            Gender:Gender,
+            time:"Data was submit on " + Date()
+        };
+
+        $.post("https://sundragon.advws.com/test/dragon/",ProfileData,(Debug) => 
+        {
+            console.log(Debug);            
+        }
+        );
+
+    }   
+    
+    function FindData()
+    {
+        var Keyword = $(Searching).val();
+        document.getElementById("Search Status").innerHTML = $(Searching).val() + " On Searching.....";        
+        console.log(Keyword);
+
+        //Find data you want to find
+        var SearchingType = -1;        
+        if(document.getElementById("S_Name").checked === true)
+        {
+            SearchingType = 0;    
+        }
+        else if(document.getElementById("S_LName").checked === true)
+        {
+            SearchingType = 1;  
+        }
+        else if(document.getElementById("S_Gender").checked === true)
+        {
+            SearchingType = 2;  
+        }
+        else if(document.getElementById("S_Time").checked === true)
+        {
+            SearchingType = 3;  
+        }
+        else
+        {
+            alert("Please Select some searching type");
+            document.getElementById("Search Status").innerHTML = "Searching Fail!";
+        }
+
+        var KeywordData =
+        {
+            SearchType:parseInt(SearchingType),            
+            Keyword:Keyword
+        };
+
+        console.log(KeywordData);
+                            
+        //Send Keyword to Server
+        $.post("https://sundragon.advws.com/test/dragon/Searching/",KeywordData,(Result) => 
+        {
+            console.log(Result);   
+            alert("Searching Keyword received");
+            document.getElementById("Search Status").innerHTML = "Searching Complete!";
+            document.getElementById("Search Bar").innerHTML = "Searching Result"; 
+
+            
+            //Send the result...
+            //document.getElementById("Said4").innerHTML = Result[0].name;
+            
+            for(let nA = 0; nA < Result.length; nA++)
+            {
+                document.getElementById("SearchResult").innerHTML += "<li>" +Result[nA].FirstName + " " + Result[nA].LastName + " " + Result[nA].Gender + " " + Result[nA].time +"</li>"+"<br>";
+            }
+            if(Result.length == 0)         
+            {
+                document.getElementById("SearchResult").innerHTML = "<li>" + " Data Not Found!" + "</li>";                
+            }  
+
+        }
+        );
+    
+        
+        
+    }
+
+    </script>
+    
+
+        
+</body>
+</html>

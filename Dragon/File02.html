@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<body style="background-color:lightgreen"> 
+    <h1> Sign In</h1>
+    <ul>
+        <li>UserName: <input type="text" id="FindUserName" name="UserName"> </li> <br>
+        <li>Password: <input type="text" id="FindPassWord" name="PassWord"></li> <br>        
+    </ul>    
+    <button id="LoginButton" type="button" onclick="CheckingInfo()">Login</button>
+    <p id="Said"> </p>
+    <br>    
+    <p>If you did not have an account please click here  <a href="/C:/Users/ACER/Desktop/PartTime%20101/Dragon/File03.html">Register Here</a> </p> 
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+    function CheckingInfo()
+    {
+        //Checking For Empty or Not
+        if(!($(FindUserName).val()))
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at First Name");
+        }  
+        else if(!($(FindPassWord).val()))
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at Last Name");
+        } 
+        else
+        {
+            var AccessKeyword =
+            {
+                FindUserName:$(FindUserName).val(),
+                FindPassWord:$(FindPassWord).val()                   
+            };
+
+            
+            $.post("https://sundragon.advws.com/test/dragon/SingIn/",AccessKeyword,(Result) => 
+            {
+                console.log(Result);                
+                if(Result[0].UserName == $(FindUserName).val() && Result[0].PassWord == $(FindPassWord).val())      
+                {
+                    document.getElementById("Said").innerHTML = "Welcome " + $(FindUserName).val();
+                    console.log(Result); 
+                    console.log("Welcome " + $(FindUserName).val());
+                    alert("Welcome " + $(FindUserName).val());
+                    location.replace("file:///C:/Users/ACER/Desktop/PartTime%20101/Dragon/File01.html")
+                }
+                else    
+                {
+                    alert("Your Username or Password are incorrect!");
+                    location.replace("file:///C:/Users/ACER/Desktop/PartTime%20101/Dragon/File02.html")
+                }
+            }
+            );
+        }                
+    
+        
+    }   
+    
+    </script>
+
+</body>

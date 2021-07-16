@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<body style="background-color:lightgreen"> 
+    <h1> Register</h1>
+    <p>Setup your account</p>
+    <ul>
+        <li>UserName: <input type="text" id="UserName" name="UserName"> </li> <br>
+        <li>Password: <input type="text" id="PassWord" name="PassWord"></li> <br>        
+    </ul>        
+
+    <button id="LoginButton" type="button" onclick="Register()">Register</button>
+    <p id="Said"> </p>             
+
+
+
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+
+    function Register()//Don't Forget to front-RE
+    {
+        var Ispass = false
+        //Checking For Empty or Not
+        if(!($(UserName).val()))
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at First Name");           
+        }  
+        else if(!($(PassWord).val()))
+        {
+           alert("You have missing component");
+           document.getElementById("Said").innerHTML = "You have missing component!";
+           console.log("Error at Last Name");
+        }  
+       
+        var Account =
+        {
+            UserName:$(UserName).val(),
+            PassWord:$(PassWord).val(),
+            RegisterDate: Date()                   
+        };
+
+        $.post("https://sundragon.advws.com/test/dragon/Register/",Account,(Result) => 
+        {
+            console.log(Result);                                                                     
+        }                                           
+        ); 
+
+        location.replace("file:///C:/Users/ACER/Desktop/PartTime%20101/Dragon/File02.html")
+         
+    }                                      
+    
+    function Changepage()
+    {
+        location.replace("file:///C:/Users/ACER/Desktop/PartTime%20101/Dragon/File02.html")
+    }
+
+    </script>
+
+</body>

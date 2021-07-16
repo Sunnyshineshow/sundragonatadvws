@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $.get("https://sundragon.advws.com/tsfam/menulist/Customer_Order",(Customer_Menu) =>
+    {
+        console.log("Successfully get data");
+        console.log(Customer_Menu)  
+        
+        for(let nA = 0; nA < Customer_Menu.orderList.length;nA++)
+        {
+            let name = Customer_Menu.orderList[nA].itemName;
+            let OrderQuantity = Customer_Menu.orderList[nA].itemQuantity;
+            allMenu.push(Ordername);
+
+            document.getElementById('PriceTable').innerHTML += `<tr><td id=\"${name}\">${name}</td> <td id=\"${name}_quantity\">${OrderQuantity}</td> <td><input type=\"text\" id=\"${name}_remark\"></td>`
+        }
+    })    
+</script>   
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+table 
+{
+  font-family: "Times New Roman", Times, serif;
+  border-collapse: collapse;
+  width: 100%;  
+}
+
+td, th 
+{
+  border: 1px solid #000000;
+  text-align: left;
+  padding: 8px;
+
+}
+
+tr:nth-child(even) 
+{
+  background-color: #e29a57;
+}
+
+tr:nth-child(odd) 
+{
+  background-color: #e9b17d;
+}
+
+.menu 
+{    
+    float: left;
+    width: 18%;
+    text-align:center
+}
+.OrderList-menu
+{   
+    background-color: #e62f38;
+    border: 3px solid white;
+    padding: 8px;
+    margin-top: 7px;
+    border-bottom: 1.5px solid #ebbb8e;
+}
+
+.main 
+{
+    background-color: rgb(77, 77, 248);
+    border: 5px solid white;
+    float: left;
+    width: 52%;
+    padding: 0 20px;
+    overflow: hidden;
+}
+.right {
+    
+    float: left;
+    width: 30%;
+    padding: 10px 15px;
+    margin-top: 7px;
+}
+
+.tablink {
+  background-color: #555;
+  color: white;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  font-size: 17px;
+  width: 25%;
+}
+
+.tablink:hover {
+  background-color: #777;
+}
+
+/* Style the tab content */
+.tabcontent {
+  color: white;
+  display: none;
+  padding: 50px;
+  text-align: left;
+}
+
+#Booking {background-color:rgb(255, 0, 0);}
+#Order {background-color:orange;}
+#Billing {background-color:rgb(114, 114, 241);}
+#Delivery {background-color:green;}
+
+.sticky {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+
+  background-color: rgb(116, 3, 3);
+  padding: 10px;
+  font-size: 20px;
+}
+.tab1 
+{
+  tab-size: 2;
+}
+@media only screen and (max-width:800px) {
+  /* For tablets: */
+  .main {
+    width: 80%;
+    padding: 0;
+  }
+  .right {
+    width: 100%;
+  }
+}
+@media only screen and (max-width:500px) {
+  /* For mobile phones: */
+  .menu, .main, .right {
+    width: 100%;
+  }
+}
+</style>
+</head>
+
+
+<body style="font-family: Times New Roman">
+
+  <div id="Booking" class="tabcontent">
+    <h1>Tsukasa's Japanese Restaurant</h1>
+    <p>Booking Menu.</p>
+  </div>
+  
+  <div id="Order" class="tabcontent">
+    <h1>Tsukasa's Japanese Restaurant</h1>
+    <p>Order Menu.</p> 
+  </div>
+  
+  <div id="Billing" class="tabcontent">
+    <h1>Tsukasa's Japanese Restaurant</h1>
+    <p>Total cost.</p>
+  </div>
+  
+  <div id="Delivery" class="tabcontent">
+    <h1>Tsukasa's Japanese Restaurant</h1>
+    <p>Delivery the menu.</p>
+  </div>
+  
+  <button class="tablink" style="font-family: Times New Roman" onclick="openCity('Booking', this, 'rgb(168, 0, 0)')">Booking</button>
+  <button class="tablink" style="font-family: Times New Roman" onclick="openCity('Order', this, 'rgb(204, 134, 4)')">Order</button>
+  <button class="tablink" style="font-family: Times New Roman" onclick="openCity('Billing', this, 'blue')" id="defaultOpen">Billing</button>
+  <button class="tablink" style="font-family: Times New Roman" onclick="openCity('Delivery', this, 'green')">Delivery</button>
+</div>
+
+
+
+  <div class="menu">
+    <br><br> <br> <br> <br>        
+  </div>
+
+  <div class="main">
+    <h2>List Menu</h2>
+    <ul>
+        <li>
+            <p float="left">Total Price</p>
+        </li>
+    </ul>    
+
+    <table id="PriceTable">
+        <tr>
+          <th>Menu</th>
+          <th>Number</th>
+          <th>Price</th>
+        </tr>       
+    </table>             
+      <br><br><br><br><br><br><br>
+  </div>
+
+  <div class="right">
+    <br><br><br><br><br><br><br>
+  </div>  
+
+</div>
+
+
+</body>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>    
+<script>
+function openCity(Action,elmnt,color) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablink");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].style.backgroundColor = "";
+  }
+  document.getElementById(Action).style.display = "block";
+  elmnt.style.backgroundColor = color;
+}
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click(); 
+//==================================================================================================================================
+
+$(document).ready(() =>
+{
+    
+})
+
+</script>
+</html>
